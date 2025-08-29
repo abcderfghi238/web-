@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>EJA SHOP — Login</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <style>
+    :root{
+      --accent:#2fb6d6;
+      --bg:#0b1626;
+      --card:#0b2133;
+      --muted:#9fb0cc;
+      --radius:12px;
+      --glass: rgba(255,255,255,0.03);
+    }
+    *{box-sizing:border-box;font-family:Inter,system-ui,Arial,Helvetica,sans-serif}
+    body{margin:0;min-height:100vh;background:linear-gradient(180deg,#071025,#0b1626);color:#e6eefc;display:flex;align-items:center;justify-content:center;padding:24px}
+    .wrap{width:100%;max-width:920px;display:grid;grid-template-columns:1fr 420px;gap:24px}
+    .info{padding:28px;border-radius:var(--radius);background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.04)}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:56px;height:56px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#07212a;font-weight:800;font-size:18px}
+    h1{margin:8px 0 0;font-size:20px}
+    p.lead{margin:10px 0 0;color:var(--muted)}
+    .card{padding:22px;border-radius:12px;background:var(--card);border:1px solid rgba(255,255,255,0.03)}
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    .input, .btn{width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    .input{height:44px}
+    .row{display:flex;gap:10px}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),#8b5cf6);border:none;color:#071025;font-weight:700}
+    .small{font-size:13px;color:var(--muted)}
+    .muted{color:var(--muted)}
+    .form-actions{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:12px}
+    .hint{font-size:13px;color:var(--muted);margin-top:10px}
+    .toggle-pass{position:relative}
+    .toggle-pass i{position:absolute;right:12px;top:10px;cursor:pointer;color:var(--muted)}
+    .alert{padding:10px;border-radius:8px;margin-bottom:10px;font-size:14px}
+    .alert.error{background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.12);color:#ffb7b7}
+    .alert.success{background:rgba(50,255,150,0.06);border:1px solid rgba(50,255,150,0.12);color:#bfffe0}
+    @media (max-width:920px){ .wrap{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="info">
+      <div class="brand">
+        <div class="logo">EJ</div>
+        <div>
+          <h1>EJA SHOP</h1>
+          <p class="lead">Panel pesanan jual suntik folowers sosmed.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:18px" class="muted">
+        <strong>Fitur demo:</strong>
+        <ul>
+          <li>silkan Registe </li>
+          <li>welcome to eja shop</li>
+          <li>silahkan membaca sebelum membeli</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div id="alerts"></div>
+
+      <!-- LOGIN FORM -->
+      <div id="loginBox">
+        <h3 style="margin:0 0 12px">Masuk ke EJA SHOP</h3>
+
+        <label for="email">Email atau Username</label>
+        <input id="email" class="input" placeholder="email@contoh.com atau username">
+
+        <label for="password" style="margin-top:10px">Password</label>
+        <div class="toggle-pass">
+          <input id="password" class="input" type="password" placeholder="Masukkan password">
+          <i id="showPass" class="fa-solid fa-eye"></i>
+        </div>
+
+        <div class="form-actions">
+          <label class="small muted"><input id="remember" type="checkbox"> Ingat saya</label>
+          <button id="btnLogin" class="btn primary">Masuk</button>
+        </div>
+
+        <div style="margin-top:10px" class="hint small">Belum punya akun? <a href="#" id="showRegister">Daftar di sini</a></div>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div id="registerBox" style="display:none">
+        <h3 style="margin:0 0 12px">Daftar Akun Baru</h3>
+
+        <label for="rUser">Username</label>
+        <input id="rUser" class="input" placeholder="username">
+
+        <label for="rEmail" style="margin-top:10px">Email</label>
+        <input id="rEmail" class="input" placeholder="email@contoh.com">
+
+        <label for="rPass" style="margin-top:10px">Password</label>
+        <div class="toggle-pass">
+          <input id="rPass" class="input" type="password" placeholder="Buat password (min 6)">
+          <i id="showRPass" class="fa-solid fa-eye"></i>
+        </div>
+
+        <div class="form-actions">
+          <button id="btnRegister" class="btn primary">Daftar</button>
+          <button id="btnCancelReg" class="btn">Batal</button>
+        </div>
+
+        <div style="margin-top:10px" class="hint small">Dengan mendaftar kamu menyetujui <strong>syarat & ketentuan</strong>.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Simple client-side auth demo using localStorage
+    const alerts = document.getElementById('alerts');
+    const loginBox = document.getElementById('loginBox');
+    const registerBox = document.getElementById('registerBox');
+
+    const emailEl = document.getElementById('email');
+    const passwordEl = document.getElementById('password');
+    const rememberEl = document.getElementById('remember');
+    const btnLogin = document.getElementById('btnLogin');
+
+    const rUser = document.getElementById('rUser');
+    const rEmail = document.getElementById('rEmail');
+    const rPass = document.getElementById('rPass');
+    const btnRegister = document.getElementById('btnRegister');
+    const btnCancelReg = document.getElementById('btnCancelReg');
+
+    const showPass = document.getElementById('showPass');
+    const showRPass = document.getElementById('showRPass');
+
+    // Toggle password visibility
+    showPass.addEventListener('click', ()=> {
+      passwordEl.type = passwordEl.type === 'password' ? 'text' : 'password';
+      showPass.classList.toggle('fa-eye-slash');
+    });
+    showRPass.addEventListener('click', ()=> {
+      rPass.type = rPass.type === 'password' ? 'text' : 'password';
+      showRPass.classList.toggle('fa-eye-slash');
+    });
+
+    // switch forms
+    document.getElementById('showRegister').addEventListener('click', (e)=>{ e.preventDefault(); loginBox.style.display='none'; registerBox.style.display='block'; clearAlerts(); });
+    btnCancelReg.addEventListener('click', ()=>{ registerBox.style.display='none'; loginBox.style.display='block'; clearAlerts(); });
+
+    function showAlert(msg, type='error') {
+      alerts.innerHTML = `<div class="alert ${type==='error'?'error':'success'}">${msg}</div>`;
+      setTimeout(()=>{ alerts.innerHTML=''; }, 7000);
+    }
+    function clearAlerts(){ alerts.innerHTML=''; }
+
+    // Utilities for "user DB" in localStorage
+    function loadUsers(){
+      try{ return JSON.parse(localStorage.getItem('eja_users')||'[]'); }catch(e){return [];}
+    }
+    function saveUsers(arr){ localStorage.setItem('eja_users', JSON.stringify(arr)); }
+
+    // Register handler (client-only)
+    btnRegister.addEventListener('click', ()=>{
+      const user = rUser.value.trim();
+      const mail = rEmail.value.trim();
+      const pass = rPass.value;
+
+      if(!user || !mail || !pass){ showAlert('Lengkapi semua kolom.'); return; }
+      if(pass.length < 6){ showAlert('Password minimal 6 karakter.'); return; }
+
+      const users = loadUsers();
+      if(users.some(u => u.username === user || u.email === mail)){ showAlert('Username atau email sudah terdaftar.'); return; }
+
+      // NOTE: This demo stores plaintext password in localStorage — DO NOT use this in production.
+      users.push({ id: Date.now(), username: user, email: mail, password: pass });
+      saveUsers(users);
+
+      showAlert('Registrasi berhasil. Silakan login.', 'success');
+      // auto-switch to login
+      setTimeout(()=>{ registerBox.style.display='none'; loginBox.style.display='block'; }, 900);
+      rUser.value=''; rEmail.value=''; rPass.value='';
+    });
+
+    // Login handler
+    btnLogin.addEventListener('click', ()=>{
+      const ident = emailEl.value.trim();
+      const pass = passwordEl.value;
+      if(!ident || !pass){ showAlert('Masukkan username/email dan password.'); return; }
+
+      const users = loadUsers();
+      const found = users.find(u => u.username === ident || u.email === ident);
+      if(!found){ showAlert('Akun tidak ditemukan. Silakan daftar.'); return; }
+      if(found.password !== pass){ showAlert('Password salah.'); return; }
+
+      // Success: handle remember me
+      if(rememberEl.checked){
+        localStorage.setItem('eja_remember', JSON.stringify({ id: found.id }));
+      } else {
+        localStorage.removeItem('eja_remember');
+      }
+
+      // Set "session" (for demo)
+      localStorage.setItem('eja_session', JSON.stringify({ id: found.id, username: found.username }));
+
+      // Redirect to dashboard (demo)
+      showAlert('Login sukses! Mengarahkan ke dashboard...', 'success');
+      setTimeout(()=>{ window.location.href = 'dashboard.html'; }, 800);
+    });
+
+    // On load: if remembered, prefill
+    window.addEventListener('DOMContentLoaded', ()=>{
+      const rem = JSON.parse(localStorage.getItem('eja_remember') || 'null');
+      if(rem){
+        const users = loadUsers();
+        const u = users.find(x => x.id === rem.id);
+        if(u){ emailEl.value = u.email || u.username; rememberEl.checked = true; }
+      }
+    });
+  </script>
+</body>
+</html>

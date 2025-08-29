@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>eja shop</title>
+  <meta name="description" content="Demo order panel (legal services) — template UI." />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b1626; --panel:#0f2940; --muted:#9fb0cc; --accent:#2fb6d6; --card:#0b2133;
+      --glass: rgba(255,255,255,0.03);
+      --radius:14px;
+      --field-h:48px;
+    }
+    *{box-sizing:border-box;font-family:Inter,system-ui,Arial,Helvetica,sans-serif}
+    body{margin:0;background:linear-gradient(180deg,#071025,#0b1626);color:#e6eefc}
+    .app{max-width:1200px;margin:18px auto;padding:18px}
+    .header{display:flex;align-items:center;gap:12px}
+    .hamb{width:40px;height:40px;border-radius:10px;background:#071722;display:flex;align-items:center;justify-content:center}
+    .title{font-size:20px;font-weight:700}
+    .layout{display:grid;grid-template-columns:1fr 380px;gap:18px;margin-top:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:var(--radius);padding:18px;border:1px solid rgba(255,255,255,0.04)}
+    label{display:block;color:var(--muted);font-size:13px;margin-bottom:8px}
+    .select, .input, .textarea{width:100%;height:var(--field-h);padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:var(--card);color:inherit}
+    .textarea{min-height:90px;padding-top:12px;resize:vertical}
+    .row{display:flex;gap:12px}
+    .muted{color:var(--muted);font-size:13px}
+    .hint{display:inline-block;background:var(--glass);padding:6px 8px;border-radius:999px;font-size:12px;color:var(--muted)}
+    .small{font-size:13px;color:var(--muted)}
+    .price{font-weight:800;font-size:18px}
+    .btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),#8b5cf6);color:#071025}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:inherit}
+    .info-list{color:var(--muted);font-size:13px;line-height:1.5}
+    .notice{background:#092235;border-left:4px solid #2fb6d6;padding:14px;border-radius:10px;color:var(--muted);margin-bottom:12px}
+    .top-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+    .footer{margin-top:12px;color:var(--muted);font-size:13px}
+    @media (max-width:980px){ .layout{grid-template-columns:1fr} .layout aside{order:2} }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <div class="hamb"><i class="fa-solid fa-bars" style="opacity:0.8"></i></div>
+      <div class="title">Buat Pesanan</div>
+      <div style="margin-left:auto" class="muted"></div>
+    </div>
+
+    
+
+    <div class="layout">
+      <!-- Form utama -->
+      <main class="card">
+        <div class="top-row">
+          <div style="display:flex;gap:10px;align-items:center">
+            <div class="hint"><i class="fa-solid fa-info"></i> Pastikan layanan sesuai kebijakan</div>
+            <div class="small">silahkan pilih untuk order</div>
+          </div>
+          <div class="small muted">Status: <strong style="color:#9fe9ff">Online</strong></div>
+        </div>
+
+        <form id="orderForm">
+          <div style="margin-bottom:12px">
+            <label>Kategori</label>
+            <select id="kategori" class="select" required>
+              <option value="">Pilih...</option>
+              <option value="tiktok">TikTok</option>
+              <option value="instagram">Instagram</option>
+              <option value="youtube">YouTube</option>
+              <option value="manajemen">Telegram</option>
+              <option value="tutorial">WhatsApp</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom:12px">
+            <label>Layanan</label>
+            <select id="layanan" class="select" required>
+              <option value="">Pilih kategori terlebih dahulu</option>
+            </select>
+            <div class="muted" style="margin-top:8px"><input id="favOnly" type="checkbox"> Tampilkan layanan favorit saja</div>
+          </div>
+
+          <div style="margin-bottom:12px">
+            <label>Deskripsi layanan (opsional)</label>
+            <textarea id="deskripsi" class="textarea" placeholder="Tambahkan catatan khusus untuk penyedia layanan..."></textarea>
+          </div>
+
+          <div style="margin-bottom:12px">
+            <label>Link / Target</label>
+            <input id="target" class="input" placeholder="Masukkan URL profil / pos / channel (contoh: https://www.tiktok.com/@username)" required>
+            <div class="muted" style="margin-top:6px"></div>
+          </div>
+
+          <div style="margin-bottom:12px">
+            <label>Jumlah <span id="minmax" class="hint" style="margin-left:8px">Min: 1 • Max: 100</span></label>
+            <input id="jumlah" class="input" type="number" min="1" max="100" value="1">
+          </div>
+
+          <div style="margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div>
+              <label>Biaya Per Unit</label>
+              <div class="price" id="pricePer">Rp0</div>
+              <div class="muted" style="font-size:13px">Estimasi biaya total akan muncul di sebelah kanan</div>
+            </div>
+            <div style="text-align:right">
+              <label>Total</label>
+              <div class="price" id="totalPrice">Rp0</div>
+              <div style="margin-top:8px"><button type="button" id="orderBtn" class="btn primary">Order via WhatsApp</button></div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px">
+            <button type="button" id="previewBtn" class="btn ghost">Preview Pesanan</button>
+            <button type="reset" class="btn" style="margin-left:auto">Reset</button>
+          </div>
+        </form>
+
+        <div class="footer">
+          <strong>@reza</strong> 2025
+      </main>
+
+      <!-- Sidebar -->
+      <aside>
+        <div class="card" style="margin-bottom:14px">
+          <div class="notice"><strong>Perhatian Kepatuhan</strong><br>
+           harga bisa berubah suatau saat dan harga tidak menetap
+          </div>
+
+          <h4>Langkah membuat pesanan baru:</h4>
+          <ul class="info-list">
+            <li>Pilih Kategori → pilih layanan.</li>
+            <li>Masukkan Link/Target dan Jumlah pesanan.</li>
+            <li>Gunakan deskripsi untuk instruksi tambahan.</li>
+            <li>Klik Order via WhatsApp untuk konfirmasi manual.</li>
+          </ul>
+
+          <hr style="border:none;border-top:1px solid rgba(255,255,255,0.04);margin:12px 0">
+
+          <h4>Ketentuan</h4>
+          <ul class="info-list">
+            <li>Tidak ada refund jika pesanan sesuai instruksi tetapi penyebab di luar kontrol (contoh: kebijakan platform).</li>
+            <li>Pesanan akan diproses secara manual atau otomatis tergantung layanan.</li>
+            <li>Jangan memasukkan data sensitif (password).</li>
+            <li>Layanan yang melanggar ToS akan dihapus dan akun diblokir.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h4>Top Seller</h4>
+          <div style="display:flex;gap:10px;align-items:center;margin-top:12px">
+            <img src="https://via.placeholder.com/56" style="border-radius:10px">
+            <div>
+              <div style="font-weight:700">pakcik</div>
+              <div class="muted" style="font-size:13px">Response Cepat • Verified</div>
+            </div>
+          </div>
+          <div style="margin-top:12px" class="muted">Butuh bantuan teknis? <a href="https://wa.me/628311802927" style="color:var(--accent)">Chat WA</a></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    // Data layanan 
+    const SERVICES = {
+      tiktok: [
+        {id:'opt_profil', name:'Tik tok like', price:5.000, min:1000, max:500000},
+         {id:'opt_profil_d', name:'Tik tok follower', price:17.000, min:1000, max:500000},
+        {id:'tiktok_ads_a', name:'Tik tok viuw', price:2.000, min:1000, max:100000},
+       {id: 'tiktok_ads_b', name:'Tik tok save', price:2.000, min:1000, max:100000},
+        {id: 'tiktok_ads_c', name:'Tik tok sher', price:2.000, min:1000, max:100000},
+    
+      ],
+      instagram: [
+        {id: 'ig_a', name:'Instagram like', price:3.000, min:1000, max:100000000},
+        {id: 'ig_ads', name:'Instagram follower', price:40.000, min:1000, max:1000000000},
+        {id: 'ig_ads_b', name:'Instagram viuw', price:3.000, min:1000, max:10000000000},
+        {id: 'ig_ads_c', name:'Instagram Story like', price:5.000, min:1000, max:10000000000},
+        {id: 'ig_ads_e', name:'Instagram Story viuw', price:3.000, min:1000, max:10000000000},
+        {id: 'ig_ads_f', name:'Instagram Story pool votes', price:4.000, min:1000, max:10000000000},
+        {id: 'ig_ads_d', name:'Instagram save', price:3.000, min:1000, max:10000000000},
+      ],
+      youtube: [
+        {id:'yt_opt', name:'YouTube like', price:17.000, min:1000, max:1000000},
+         {id:'yt_opt_a', name:'YouTube Community', price:23.000, min:1000, max:1000000},
+          {id:'yt_opt_b', name:'YouTube viuw', price:23.000, min:1000, max:1000000},
+           {id:'yt_opt_c', name:'YouTube subscribe', price:55.000, min:1000, max:1000000},
+            {id:'yt_opt_d', name:'YouTube waatch time', price:60.000, min:1000, max:1000000},
+             {id:'yt_opt_e', name:'YouTube waatch shorts viuw', price:15.000, min:1000, max:1000000},
+              
+      ],
+manajemen: [
+  {id:'manage_basic', name:'Telegram Reaction 😗💬', price:1000, min:1000, max:5000000},
+  {id:'manage_growth', name:'Telegram Reaction 💖💬', price:1700, min:1000, max:150000},
+  {id:'manage_growth_a', name:'Telegram story viuw', price:2500, min:1000, max:150000},
+  {id:'manage_growth_b', name:'Telegram member chanel', price:9700, min:1000, max:150000},
+  {id:'manage_growth_c', name:'Telegram post viuw', price:3700, min:1000, max:150000}
+],
+      tutorial:[
+        {id:'pdf_ads', name:'Whatsapp Chenel member no refil', price:30.000, min:1000, max:500000},
+         {id:'pdf_ads_a', name:'Whatsapp Chenel member refil', price:37.000, min:1000, max:500000},
+          {id:'pdf_ads_b', name:'Whatsapp Chenel post reaction random', price:16.000, min:1000, max:500000},
+           {id:'pdf_ads_c', name:'Whatsapp Chenel post reaction like', price:15.000, min:1000, max:500000},
+            {id:'pdf_ads_d', name:'Whatsapp Chenel post reaction love', price:15.000, min:1000, max:500000},
+            {id:'pdf_ads_e', name:'Whatsapp Chenel post reaction ketawa', price:15.000, min:1000, max:500000},
+            {id:'pdf_ads_f', name:'Whatsapp Chenel post reaction wow', price:15.000, min:1000, max:500000},
+            {id:'pdf_ads_g', name:'Whatsapp Chenel post reaction api', price:15.000, min:1000, max:500000},
+            {id:'pdf_ads_h', name:'Whatsapp Chenel post reaction maap', price:15.000, min:1000, max:500000},
+            {id:'pdf_ads_d', name:'Whatsapp Chenel post reaction juara', price:15.000, min:1000, max:500000},
+            
+      ]
+    };
+
+    const kategoriEl = document.getElementById('kategori');
+    const layananEl = document.getElementById('layanan');
+    const jumlahEl = document.getElementById('jumlah');
+    const pricePerEl = document.getElementById('pricePer');
+    const totalPriceEl = document.getElementById('totalPrice');
+    const minmaxEl = document.getElementById('minmax');
+    const orderBtn = document.getElementById('orderBtn');
+    const previewBtn = document.getElementById('previewBtn');
+    const favOnly = document.getElementById('favOnly');
+
+    let currentService = null;
+
+    function formatRp(n){
+      if(!n && n !== 0) return 'Rp0';
+      return 'Rp' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    function populateServices(cat){
+      layananEl.innerHTML = '';
+      if(!cat || !SERVICES[cat]) {
+        layananEl.innerHTML = '<option value=\"\">Pilih kategori terlebih dahulu</option>';
+        currentService = null;
+        updatePrices();
+        return;
+      }
+      const arr = SERVICES[cat];
+      // filter favorites if needed (example: price < 500k treated as popular)
+      const filtered = favOnly.checked ? arr.filter(s => s.price <= 500000) : arr;
+      if(filtered.length === 0){
+        layananEl.innerHTML = '<option value=\"\">(Tidak ada layanan favorit)</option>';
+        currentService = null;
+        updatePrices();
+        return;
+      }
+      layananEl.innerHTML = '<option value=\"\">Pilih layanan...</option>';
+      for(const s of filtered){
+        const opt = document.createElement('option');
+        opt.value = s.id;
+        opt.dataset.price = s.price;
+        opt.dataset.min = s.min;
+        opt.dataset.max = s.max;
+        opt.textContent = s.name;
+        layananEl.appendChild(opt);
+      }
+      currentService = null;
+      updatePrices();
+    }
+
+    kategoriEl.addEventListener('change', e=>{
+      populateServices(e.target.value);
+    });
+
+    layananEl.addEventListener('change', e=>{
+      const opt = e.target.selectedOptions[0];
+      if(!opt || !opt.dataset) { currentService = null; updatePrices(); return; }
+      currentService = {
+        id: opt.value,
+        name: opt.textContent,
+        price: Number(opt.dataset.price),
+        min: Number(opt.dataset.min),
+        max: Number(opt.dataset.max)
+      };
+      // set jumlah constraints
+      jumlahEl.min = currentService.min;
+      jumlahEl.max = currentService.max;
+      if(Number(jumlahEl.value) < currentService.min) jumlahEl.value = currentService.min;
+      if(Number(jumlahEl.value) > currentService.max) jumlahEl.value = currentService.max;
+      minmaxEl.textContent = `Min: ${currentService.min} • Max: ${currentService.max}`;
+      updatePrices();
+    });
+
+    jumlahEl.addEventListener('input', updatePrices);
+    favOnly.addEventListener('change', () => {
+      populateServices(kategoriEl.value);
+    });
+
+    function updatePrices(){
+      if(!currentService){
+        pricePerEl.textContent = 'Rp0';
+        totalPriceEl.textContent = 'Rp0';
+        return;
+      }
+      const per = currentService.price;
+      const qty = Math.max(Number(jumlahEl.value || 0), currentService.min || 1);
+      pricePerEl.textContent = formatRp(per);
+      totalPriceEl.textContent = formatRp(per * qty);
+    }
+
+    // Order via WhatsApp (client-side stub)
+    orderBtn.addEventListener('click', ()=>{
+      if(!currentService){
+        alert('Pilih layanan terlebih dahulu.');
+        return;
+      }
+      const target = document.getElementById('target').value.trim();
+      if(!target) { alert('Masukkan link/target.'); return; }
+      const qty = jumlahEl.value;
+      const desc = document.getElementById('deskripsi').value.trim();
+      const text = `Halo, saya ingin memesan:\\nLayanan: ${currentService.name}\\nJumlah: ${qty}\\nTarget: ${target}\\nCatatan: ${desc || '-'}\\nEstimasi: ${totalPriceEl.textContent}`;
+      // open WA (demo number)
+      const wa = 'https://wa.me/628311802927?text=' + encodeURIComponent(text);
+      window.open(wa, '_blank');
+    });
+
+    // Preview modal (simple alert demo)
+    previewBtn.addEventListener('click', ()=>{
+      if(!currentService){ alert('Pilih layanan untuk preview.'); return; }
+      const target = document.getElementById('target').value.trim();
+      const qty = jumlahEl.value;
+      const desc = document.getElementById('deskripsi').value.trim();
+      const data = {
+        layanan: currentService.name,
+        jumlah: qty,
+        target: target || '(kosong)',
+        deskripsi: desc || '(kosong)',
+        estimasi: totalPriceEl.textContent
+      };
+      const lines = Object.entries(data).map(([k,v]) => `${k}: ${v}`);
+      alert('Preview Pesanan:\\n\\n' + lines.join('\\n'));
+    });
+
+    // init
+    populateServices(kategoriEl.value);
+    updatePrices();
+  </script>
+</body>
+</html>
